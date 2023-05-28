@@ -63,7 +63,10 @@ def scrape_auctions(url):
 
     # Find all the divs within the "search-results list-view" div that contain "desa-object and the debug" in their class
     # names
-    divs = search_results_div.find_all('div', class_=lambda x: x and 'desa-object debug__object-published--True' in x)
+    try:
+        divs = search_results_div.find_all('div', class_=lambda x: x and 'desa-object debug__object-published--True' in x)
+    except:
+        print("Non-standard auction layout! They're probably selling a house or some land. Moving on.")
 
     # Close the WebDriver
     driver.quit()
@@ -114,7 +117,7 @@ def scrape_auctions(url):
 
     # Save it as a .json file
     # Save `auctions` list to a JSON file and append a part of the link, so I can find it later
-    with open(f'auctions_{url.split("/")[-2]}.json', 'w') as json_file:
+    with open(f'auctiondata/auctions_{url.split("/")[-2]}.json', 'w') as json_file:
         json.dump(auctions, json_file, indent=4)
 
     print("Auctions saved to a local .json file!")
